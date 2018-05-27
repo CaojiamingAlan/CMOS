@@ -14,12 +14,12 @@ end
 sample_rate = 676/148;
 num_of_samples = round(height/sample_rate);
 
-
 x=ones(1,num_of_samples);
 y=ones(1,num_of_samples);
 for i = 1:num_of_samples
     x(1,i)=i;
 end
+
 for i = 1:21
     for j = 1:num_of_samples
         y(1,j)=images{i,1}(round(j*sample_rate),sample_column);
@@ -31,7 +31,7 @@ for i = 1:21
 end
 
 for i = 1:21
-    block = extract(image_sequence{i,1});
+    block = sampleing(image_sequence{i,1}, '', 1200);
     i
     if length(block)~=0
         blocks{end+1,1}=block;
