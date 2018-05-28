@@ -1,41 +1,25 @@
 load('OOK_sequence_test.mat')
-images=cell(21,1);
-image_sequence = cell(21,1);
-blocks = cell(0);
+starting_index = 5;
+num_of_images = 21;
+images=cell(num_of_images,1);
+image_sequence = cell(num_of_images,1);
+blocks = [];
 sample_column = 1200;
-ys = cell(21,1);
+ys = cell(num_of_images,1);
 
-for index=5:25
-  pic_index = num2str(index);
-  s=strcat('gray_scale/',num2str(index),'_gray.jpg');
-  images{index-4,1}=imread(s);
-end
-[height,width] = size(images{1,1});
-sample_rate = 676/148;
-num_of_samples = round(height/sample_rate);
-
-x=ones(1,num_of_samples);
-y=ones(1,num_of_samples);
-for i = 1:num_of_samples
-    x(1,i)=i;
+for index = starting_index:starting_index + num_of_images - 1
+    pic_index = num2str(index);
+    s=strcat('gray_scale/',num2str(index),'_gray.jpg');
+    images{index - starting_index + 1,1}=imread(s);
 end
 
-for i = 1:21
-    for j = 1:num_of_samples
-        y(1,j)=images{i,1}(round(j*sample_rate),sample_column);
-    end
-    p = polyfit(x,y,2);
-    y_normalized = y-polyval(p,x);
-    image_sequence{i,1}=y_normalized>0;
-    ys{i,1}=y_normalized;
-end
-
-for i = 1:21
-    block = sampleing(image_sequence{i,1}, '', 1200);
-    i
-    if length(block)~=0
-        blocks{end+1,1}=block;
-    end
+for index = 1:num_of_images
+    disp(strcat('processing image',int2str(index)));
+    out = sampling(images{index,1}, 'column', 1200);
+    out = threshold(out, 'poly', 2);
+    out = extracting(out, header_OOK);
+    [num_blocks, block_length] = size(out);
+    blocks(end + 1: end + num_blocks, 1:block_length) = out; 
 end
 
 
