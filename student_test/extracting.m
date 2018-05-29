@@ -17,7 +17,7 @@ if length(headers)>=2
     end
 else
     disp('Fail to find a complete block in image');
-    disp(strcat('Headers deteced:', headers));
+    disp(strcat('Headers deteced:', int2str(headers)));
     extracted_data = [];
 end
 
